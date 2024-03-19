@@ -11,12 +11,11 @@ int main(int argc, char *argv[]) {
   std::string command = argv[1];
   std::string arg1 = argv[2];
   if (command == "cat-file") {
-    std::cout << command << arg1 << std::endl;
     catFile(arg1).decompressFile();
   } else if (command == "init") {
     Init init(arg1.c_str());
     init.execute();
-  } else if (command == "hash-objec") {
+  } else if (command == "hash-object") {
     hashBlob blob(arg1);
     blob.execute();
   }

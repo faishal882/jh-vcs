@@ -8,7 +8,7 @@ std::string catFile::resolveFilePath() {
   // find file
   std::string folder = hash.substr(0, 2);
   std::string file_name = hash.substr(2, 38);
-  std::string filelocation = ".git/objects/" + folder + "/" + file_name;
+  std::string filelocation = ".jh/objects/" + folder + "/" + file_name;
   return filelocation;
 }
 
