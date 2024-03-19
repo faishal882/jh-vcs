@@ -1,6 +1,7 @@
 #include "commit/cat-file.h"
 #include "commit/commit.h"
 #include "commit/hash-blob.h"
+#include "commit/ls-tree.h"
 #include "init/init.h"
 #include <iostream>
 
@@ -18,6 +19,9 @@ int main(int argc, char *argv[]) {
   } else if (command == "hash-object") {
     hashBlob blob(arg1);
     blob.execute();
+  } else if (command == "ls-tree") {
+    lsTree tree(arg1);
+    tree.decompressFolder();
   }
 
   return 0;
