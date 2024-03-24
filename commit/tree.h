@@ -20,6 +20,7 @@ public:
   fs::path directoryPath;
   std::vector<std::pair<char, std::string>> files;
 
+  Tree();
   Tree(const std::string path);
 
   std::string sha1(const std::string &data);
@@ -31,7 +32,8 @@ public:
   std::vector<std::pair<char, std::string>>
   getFilesAndFolders(const fs::path &directory);
 
-  bool createTree(std::stringstream &tree);
+  bool createTree(std::stringstream &tree,
+                  std::vector<std::pair<char, std::string>> &files);
 
   // private:
   void execute();

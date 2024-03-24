@@ -3,6 +3,11 @@
 namespace jh {
 namespace commit {
 
+Tree::Tree() {
+  std::cout << "Please pass directoryPath, default cwd; " << std::endl;
+  directoryPath = ".";
+}
+
 Tree::Tree(const std::string path) {
   directoryPath = path;
   files = getFilesAndFolders(path);
@@ -120,7 +125,8 @@ Tree::getFilesAndFolders(const fs::path &directory) {
   return filesAndFolders;
 }
 
-bool Tree::createTree(std::stringstream &tree) {
+bool Tree::createTree(std::stringstream &tree,
+                      std::vector<std::pair<char, std::string>> &files) {
   for (auto i : files) {
     if (i.first == 'F') {
       // TODO {store compress file, create hash, get hash, get filename}
@@ -146,8 +152,7 @@ bool Tree::createTree(std::stringstream &tree) {
       std::stringstream subTree;
       std::string data;
       auto subFiles = getFilesAndFolders(i.second);
-      files = subFiles;
-      createTree(subTree);
+      createTree(subTree, subFiles);
       if (compress(subTree, data)) {
         std::string sha = sha1(data);
         tree << "10075"
@@ -163,7 +168,7 @@ bool Tree::createTree(std::stringstream &tree) {
 
 void Tree::execute() {
   std::stringstream tree;
-  createTree(tree);
+  createTree(tree, this->files);
   std::cout << tree.str() << std::endl;
 }
 } // namespace commit
