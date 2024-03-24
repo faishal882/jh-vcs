@@ -1,28 +1,21 @@
 #pragma once
 
-#include "hash-blob.h"
-#include "tree.h"
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 namespace jh {
 namespace commit {
 
-class Commit : public Tree {
+class Commit {
 public:
   std::string author;
   std::string message;
 
-  Commit(std::string author) {
-    std::cout << "Commited " << author << std::endl;
-  }
+  Commit() { std::cerr << "please provide author & message!"; };
+  Commit(const std::string &author, const std::string &message);
 
-  // bool compress(std::stringstream &ss, std::string &data);
+  bool createCommit();
 
-  // int createFolder(const char *folderpath, mode_t mode);
-  // bool createFile(std::string &hash, std::string &data);
+  void execut();
 };
 
 } // namespace commit

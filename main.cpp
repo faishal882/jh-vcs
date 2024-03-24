@@ -40,7 +40,8 @@ int main(int argc, char *argv[]) {
   }
 
   else if (command == "commit") {
-    Commit commit(arg1);
+    Commit commit("faishal", arg1);
+    commit.createCommit();
   }
 
   return 0;
