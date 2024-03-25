@@ -1,7 +1,10 @@
-1) Initialize the .git directory
-2) Read a blob object
-3) Create a blob object
-4) Read a tree object
-5) Write a tree object
-6) Create a commit
+1) Initialize the .git directory //done
+2) Read a blob object            //done
+3) Create a blob object          //done 
+4) Read a tree object            //done 
+5) Write a tree object           //done 
+6) Create a commit               //working
+7) Implement log for commits     
+8) Implement revert(git revert)
+9) Impelment diff(git diff)
 

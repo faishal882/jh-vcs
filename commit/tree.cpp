@@ -46,13 +46,18 @@ bool Tree::createTree(std::stringstream &tree,
       }
       ss << inFile.rdbuf();
 
+      std::string test_ss_str = ss.str();
+
       if (Zlib::compress(ss, data)) {
         std::string sha;
         sha = Zlib::sha1(data);
+        fileUtils::createFile(sha, data);
         tree << "10065"
              << "\t"
              << "blob"
              << "\t" << i.second << "\t" << sha << std::endl;
+
+        std::string test_tree_str = tree.str();
       }
     } else {
       // TODO {recurively}
@@ -60,6 +65,7 @@ bool Tree::createTree(std::stringstream &tree,
       std::string data;
       auto subFiles = getFilesAndFolders(i.second);
       createTree(subTree, subFiles);
+      std::string test_subtree_str = tree.str();
       bool compressed = Zlib::compress(subTree, data);
       if (compressed) {
         std::string sha = Zlib::sha1(data);
@@ -67,8 +73,26 @@ bool Tree::createTree(std::stringstream &tree,
              << "\t"
              << "tree"
              << "\t" << i.second << "\t" << sha << std::endl;
+        std::string test_tree_str = tree.str();
       }
     }
+  }
+
+  std::string data;
+  bool compressed = false;
+  if (tree.str() != "")
+    compressed = Zlib::compress(tree, data);
+  if (compressed) {
+    std::string sha = Zlib::sha1(data);
+    std::string test_tree_str = tree.str();
+    // std::cout << "SHA: " << sha << std::endl
+    //           << "TREE: " << tree.str() << std::endl;
+    // std::cout << "D: ";
+    // for (auto i : files) {
+    //   std::cout << i.first << " " << i.second << ",";
+    // }
+    // std::cout << std::endl;
+    fileUtils::createFile(sha, data);
   }
 
   return true;
