@@ -32,7 +32,8 @@ int main(int argc, char *argv[]) {
   else if (command == "ls-tree") {
     if (flag == "-w") {
       Tree tree(arg1);
-      tree.execute();
+      std::cout << tree.tree << std::endl;
+      // tree.execute();
     } else {
       lsTree tree(arg1);
       tree.decompressFolder();

@@ -5,8 +5,24 @@ namespace commit {
 Commit::Commit(const std::string &author, const std::string &msg) {
   this->author = author;
   this->message = msg;
-  this->tree = "";
+  this->tree = createTree();
   this->parent = "";
+}
+
+std::string Commit::createTree() {
+  Tree tree = Tree();
+  std::cout << tree.tree << std::endl;
+  std::stringstream ss(tree.tree);
+  std::string data;
+
+  if (Zlib::compress(ss, data)) {
+    std::string sha;
+    sha = Zlib::sha1(data);
+
+    return sha;
+  }
+
+  return "";
 }
 
 bool Commit::createCommit() {

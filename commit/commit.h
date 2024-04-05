@@ -2,6 +2,7 @@
 
 #include "../utils/fileutils.h"
 #include "../utils/zlibutils.h"
+#include "./tree.h"
 #include <iostream>
 #include <sstream>
 
@@ -18,7 +19,7 @@ public:
   Commit() { std::cerr << "please provide author & message!"; };
   Commit(const std::string &author, const std::string &message);
 
-  bool createTree();
+  std::string createTree();
 
   bool createCommit();
 

@@ -6,11 +6,14 @@ namespace commit {
 Tree::Tree() {
   std::cout << "Please pass directoryPath, default cwd; " << std::endl;
   directoryPath = ".";
+  files = getFilesAndFolders(directoryPath);
+  tree = tree_str();
 }
 
 Tree::Tree(const std::string path) {
   directoryPath = path;
-  files = getFilesAndFolders(path);
+  files = getFilesAndFolders(directoryPath);
+  tree = tree_str();
 }
 
 std::vector<std::pair<char, std::string>>
@@ -98,10 +101,18 @@ bool Tree::createTree(std::stringstream &tree,
   return true;
 };
 
-void Tree::execute() {
+std::string Tree::tree_str() {
   std::stringstream tree;
-  createTree(tree, this->files);
-  std::cout << tree.str() << std::endl;
+  bool create_tree = createTree(tree, this->files);
+  if (create_tree)
+    return tree.str();
+  return "";
 }
+
+// void Tree::execute() {
+//   std::stringstream tree;
+//   createTree(tree, this->files);
+//   std::cout << tree.str() << std::endl;
+// }
 } // namespace commit
 } // namespace jh

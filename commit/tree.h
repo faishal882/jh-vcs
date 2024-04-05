@@ -12,6 +12,7 @@ class Tree {
 public:
   fs::path directoryPath;
   std::vector<std::pair<char, std::string>> files;
+  std::string tree;
 
   Tree();
   Tree(const std::string path);
@@ -22,11 +23,12 @@ public:
   std::vector<std::pair<char, std::string>>
   getFilesAndFolders(const fs::path &directory);
 
+  std::string tree_str();
   bool createTree(std::stringstream &tree,
                   std::vector<std::pair<char, std::string>> &files);
 
   // private:
-  void execute();
+  // void execute();
 };
 } // namespace commit
 } // namespace jh
