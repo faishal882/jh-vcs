@@ -6,7 +6,39 @@ Commit::Commit(const std::string &author, const std::string &msg) {
   this->author = author;
   this->message = msg;
   this->tree = createTree();
-  this->parent = "";
+  this->parent = parentHash();
+}
+
+std::string Commit::extractHead(const std::string &input) {
+  size_t lastSlashPos = input.find_last_of('/');
+  if (lastSlashPos != std::string::npos && lastSlashPos < input.size() - 1) {
+    return input.substr(lastSlashPos + 1);
+  }
+  return "";
+}
+
+void Commit::getDataFromFile(const std::string &file, std::string &fileData) {
+  std::ifstream inFile(file, std::ios::binary);
+  if (!inFile.is_open()) {
+    std::cerr << "Failed to open input file: " << file << std::endl;
+    return;
+  }
+  std::getline(inFile, fileData);
+  inFile.close();
+}
+
+std::string Commit::parentHash() {
+  std::string headFile = ".jh/HEAD";
+  std::string headData;
+  getDataFromFile(headFile, headData);
+
+  std::string head = extractHead(headData);
+
+  std::string parent = ".jh/refs/" + head;
+  std::string parentHash;
+  getDataFromFile(parent, parentHash);
+
+  return parentHash;
 }
 
 std::string Commit::createTree() {
@@ -45,8 +77,25 @@ bool Commit::createCommit() {
     std::string sha = Zlib::sha1(compressedData);
     bool created = fileUtils::createFile(sha, compressedData);
     std::cout << sha << std::endl;
-    if (created)
+    if (created) {
+      std::string headFile = ".jh/HEAD";
+      std::string headData;
+      getDataFromFile(headFile, headData);
+
+      std::string head = extractHead(headData);
+
+      std::string parent = ".jh/refs/" + head;
+      std::ofstream file(parent);
+      if (!file.is_open()) {
+        std::cerr << "Error opening file: " << parent << std::endl;
+        return false;
+      }
+
+      file << sha;
+      file.close();
+
       return true;
+    }
   }
 
   return false;

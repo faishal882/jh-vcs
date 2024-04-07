@@ -25,8 +25,7 @@ public:
   Init(const char *filepath, const char *repository, mode_t mode);
 
   int createFolder(const char *filepath, mode_t mode);
-  int createConfig(const char *filepath, mode_t mode);
-  int createHead(const char *filepath, mode_t mode);
+  int createFile(const char *filepath, const char *filename, mode_t mode);
 
   int deleteFolder(const char *filepath);
   int deleteFile(const char *filepath);

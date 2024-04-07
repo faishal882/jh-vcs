@@ -34,25 +34,20 @@ int Init::createFolder(const char *filepath, mode_t mode) {
   return 0;
 }
 
-int Init::createConfig(const char *filepath, mode_t mode) {
-  FILE *file = fopen(resolveFilePath(filepath, "config"), "w");
+// create a file if error returns -1 else 0
+int Init::createFile(const char *filepath, const char *filename, mode_t mode) {
+  FILE *file = fopen(resolveFilePath(filepath, filename), "w");
   if (file == NULL) {
-    fprintf(stderr, "Error creating config: %s\n", strerror(errno));
+    fprintf(stderr, "Error creating %s: %s\n", filename, strerror(errno));
     return -1;
   }
-  fprintf(file, "This is config file all config stays here\n");
-  fclose(file);
 
-  return 0;
-}
-
-int Init::createHead(const char *filepath, mode_t mode) {
-  FILE *file = fopen(resolveFilePath(filepath, "HEAD"), "w");
-  if (file == NULL) {
-    fprintf(stderr, "Error creating HEAD: %s\n", strerror(errno));
-    return -1;
-  }
-  fprintf(file, "ref: refs/heads/master");
+  if (filename == "HEAD")
+    fprintf(file, "ref: refs/master");
+  else if (filename == "config")
+    fprintf(file, "This is config file all config stays here\n");
+  else
+    fprintf(file, "Null");
   fclose(file);
 
   return 0;
@@ -91,23 +86,33 @@ int Init::execute() {
     return -1;
   }
 
-  const char *subfolderpath = resolveFilePath(filepath, objects);
-  if (createFolder(subfolderpath, mode) == -1) {
+  const char *objectsFolder = resolveFilePath(filepath, objects);
+  if (createFolder(objectsFolder, mode) == -1) {
     deleteFolder(filepath);
     return -1;
   }
 
-  const char *subfolderpath2 = resolveFilePath(filepath, branches);
-  if (createFolder(subfolderpath2, mode) == -1) {
+  const char *branchesFolder = resolveFilePath(filepath, branches);
+  if (createFolder(branchesFolder, mode) == -1) {
     deleteFolder(filepath);
     return -1;
   }
 
-  if (createConfig(filepath, mode) == -1) {
+  const char *refsFolder = resolveFilePath(filepath, "refs");
+  if (createFolder(refsFolder, mode) == -1) {
     deleteFolder(filepath);
     return -1;
   }
-  if (createHead(filepath, mode) == -1) {
+
+  if (createFile(filepath, "config", mode) == -1) {
+    deleteFolder(filepath);
+    return -1;
+  }
+  if (createFile(filepath, "HEAD", mode) == -1) {
+    deleteFolder(filepath);
+    return -1;
+  }
+  if (createFile(refsFolder, "master", mode) == -1) {
     deleteFolder(filepath);
     return -1;
   }
