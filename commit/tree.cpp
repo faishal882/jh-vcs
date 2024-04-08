@@ -37,19 +37,20 @@ Tree::getFilesAndFolders(const fs::path &directory) {
 
 bool Tree::createTree(std::stringstream &tree,
                       std::vector<std::pair<char, std::string>> &files) {
-  for (auto i : files) {
-    if (i.first == 'F') {
-      // TODO {store compress file, create hash, get hash, get filename}
+  for (const auto &entry : files) {
+    if (entry.first == 'F') {
+      /* read file data, compress data, create hash of compressed data, store it
+       in tree with metadata */
       std::stringstream ss;
       std::string data;
 
-      std::ifstream inFile(i.second, std::ios::binary);
+      std::ifstream inFile(entry.second, std::ios::binary);
       if (!inFile.is_open()) {
-        std::cerr << "Failed to open input file: " << i.second << std::endl;
+        std::cerr << "Failed to open input file: " << entry.second << std::endl;
+        return false;
       }
       ss << inFile.rdbuf();
-
-      std::string test_ss_str = ss.str();
+      inFile.close();
 
       if (Zlib::compress(ss, data)) {
         std::string sha;
@@ -58,44 +59,27 @@ bool Tree::createTree(std::stringstream &tree,
         tree << "10065"
              << "\t"
              << "blob"
-             << "\t" << i.second << "\t" << sha << std::endl;
+             << "\t" << entry.second << "\t" << sha << std::endl;
 
-        std::string test_tree_str = tree.str();
+        // std::string test_tree_str = tree.str();
+        // std::cout << "test_tree_str" << test_tree_str << std::endl;
       }
-    } else {
-      // TODO {recurively}
+    } else if (entry.first == 'D') {
+      std::vector<std::pair<char, std::string>> subFiles =
+          getFilesAndFolders(entry.second);
       std::stringstream subTree;
-      std::string data;
-      auto subFiles = getFilesAndFolders(i.second);
       createTree(subTree, subFiles);
-      std::string test_subtree_str = tree.str();
+      std::string data;
       bool compressed = Zlib::compress(subTree, data);
       if (compressed) {
         std::string sha = Zlib::sha1(data);
+        fileUtils::createFile(sha, data);
         tree << "10075"
              << "\t"
              << "tree"
-             << "\t" << i.second << "\t" << sha << std::endl;
-        std::string test_tree_str = tree.str();
+             << "\t" << entry.second << "\t" << sha << std::endl;
       }
     }
-  }
-
-  std::string data;
-  bool compressed = false;
-  if (tree.str() != "")
-    compressed = Zlib::compress(tree, data);
-  if (compressed) {
-    std::string sha = Zlib::sha1(data);
-    std::string test_tree_str = tree.str();
-    // std::cout << "SHA: " << sha << std::endl
-    //           << "TREE: " << tree.str() << std::endl;
-    // std::cout << "D: ";
-    // for (auto i : files) {
-    //   std::cout << i.first << " " << i.second << ",";
-    // }
-    // std::cout << std::endl;
-    fileUtils::createFile(sha, data);
   }
 
   return true;
