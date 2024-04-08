@@ -1,4 +1,6 @@
 .jh/
+.jh/*
+./.jh/
 
 # Executables
 *.exe
@@ -7,3 +9,4 @@
 *.i*86
 *.x86_64
 *.hex
+*.elf

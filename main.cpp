@@ -2,6 +2,7 @@
 #include "commit/commit.h"
 #include "commit/hash-blob.h"
 #include "commit/ls-tree.h"
+#include "commit/reset.h"
 #include "commit/tree.h"
 #include "init/init.h"
 #include <iostream>
@@ -43,6 +44,10 @@ int main(int argc, char *argv[]) {
   else if (command == "commit") {
     Commit commit("faishal", arg1);
     commit.execute();
+  }
+
+  else if (command == "reset") {
+    ResetCommit reset("luefuieliuhlueglf8");
   }
 
   return 0;

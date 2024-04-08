@@ -3,7 +3,7 @@
 3) Create a blob object          //done 
 4) Read a tree object            //done 
 5) Write a tree object           //done 
-6) Create a commit               //working
+6) Create a commit               //done
 7) Implement log for commits     
 8) Implement revert(git revert)
 9) Impelment diff(git diff)

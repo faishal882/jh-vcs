@@ -1,7 +1,6 @@
+#include "../utils/zlibutils.h"
 #include <fstream>
-#include <iostream>
 #include <string>
-#include <zlib.h>
 
 namespace jh {
 namespace commit {

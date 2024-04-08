@@ -20,54 +20,17 @@ bool catFile::decompressFile() {
     return false;
   }
 
-  // Set up zlib structures
-  z_stream stream;
-  stream.zalloc = Z_NULL;
-  stream.zfree = Z_NULL;
-  stream.opaque = Z_NULL;
-  stream.avail_in = 0;
-  stream.next_in = Z_NULL;
-
-  // Initialize zlib for decompression
-  if (inflateInit(&stream) != Z_OK) {
-    std::cerr << "Failed to initialize zlib for decompression" << std::endl;
-    inFile.close(); // Close the input file
-    return false;
-  }
-
-  const int CHUNK_SIZE = 1024; // Size of the buffer for reading input
-  unsigned char inBuffer[CHUNK_SIZE];
-  unsigned char outBuffer[CHUNK_SIZE];
-
-  // Decompress the file
-  do {
-    inFile.read(reinterpret_cast<char *>(inBuffer), CHUNK_SIZE);
-    stream.avail_in = inFile.gcount();
-    if (stream.avail_in == 0) {
-      break; // No more input data
-    }
-    stream.next_in = inBuffer;
-
-    do {
-      stream.avail_out = CHUNK_SIZE;
-      stream.next_out = outBuffer;
-      int ret = inflate(&stream, Z_NO_FLUSH);
-      if (ret == Z_STREAM_ERROR) {
-        std::cerr << "Error during decompression: " << stream.msg << std::endl;
-        inflateEnd(&stream); // Clean up zlib resources
-        inFile.close();      // Close the input file
-        return false;
-      }
-      size_t have = CHUNK_SIZE - stream.avail_out;
-      std::cout.write(reinterpret_cast<char *>(outBuffer), have);
-    } while (stream.avail_out == 0);
-  } while (true);
-
-  // Clean up zlib resources
-  inflateEnd(&stream);
-
-  // Close input files
+  std::stringstream ss;
+  ss << inFile.rdbuf();
   inFile.close();
+
+  std::string data;
+
+  bool decompressed = Zlib::decompress(ss, data);
+
+  if (decompressed)
+    std::cout << data << std::endl;
+
   return true;
 }
 } // namespace commit
