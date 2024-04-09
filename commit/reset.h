@@ -1,6 +1,7 @@
 #pragma once
 
-#include <iostream>
+#include "../utils/fileutils.h"
+#include "../utils/zlibutils.h"
 
 namespace jh {
 namespace commit {
@@ -9,10 +10,11 @@ class ResetCommit {
 public:
   std::string hash;
 
-  ResetCommit(const char *hash);
+  ResetCommit(const std::string &hash);
 
-  bool deCompressTree(const char *hash);
-  bool deCompressBlob(const char *hash);
+  bool deCompressCommit(const std::string &hash);
+  bool deCompressTree(const std::string &hash);
+  bool deCompressBlob(const std::string &hash);
 
   bool replaceFileContent(const char *hash, const char *filename);
   bool createFile(const char *hash, const char *filename);

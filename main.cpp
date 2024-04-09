@@ -47,7 +47,8 @@ int main(int argc, char *argv[]) {
   }
 
   else if (command == "reset") {
-    ResetCommit reset("luefuieliuhlueglf8");
+    ResetCommit reset(arg1);
+    reset.deCompressCommit(arg1);
   }
 
   return 0;

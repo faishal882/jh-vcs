@@ -50,7 +50,7 @@ std::string Commit::createTree() {
   if (Zlib::compress(ss, data)) {
     std::string sha;
     sha = Zlib::sha1(data);
-
+    bool created = fileUtils::createFile(sha, data);
     return sha;
   }
 

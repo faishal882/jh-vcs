@@ -20,6 +20,7 @@ public:
   // int createFolder(const char *folderpath, mode_t mode);
   // bool createFile(std::string &hash, std::string &data);
 
+  bool containsStr(const std::string &str);
   std::vector<std::pair<char, std::string>>
   getFilesAndFolders(const fs::path &directory);
 

@@ -9,6 +9,14 @@
 namespace jh {
 class fileUtils {
 public:
+  static std::string resolveFilePath(const std::string hash) {
+    // find file
+    std::string folder = hash.substr(0, 2);
+    std::string file_name = hash.substr(2, 38);
+    std::string filelocation = ".jh/objects/" + folder + "/" + file_name;
+    return filelocation;
+  }
+
   static int createFolder(const char *folderpath, mode_t mode) {
     if (mkdir(folderpath, mode) == -1) {
       if (errno != EEXIST) {

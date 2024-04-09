@@ -16,15 +16,23 @@ Tree::Tree(const std::string path) {
   tree = tree_str();
 }
 
+// check if given string is present in a string
+bool Tree::containsStr(const std::string &str) {
+  size_t found = str.find(".jh");
+  return (found != std::string::npos);
+}
+
 std::vector<std::pair<char, std::string>>
 Tree::getFilesAndFolders(const fs::path &directory) {
   std::vector<std::pair<char, std::string>> filesAndFolders;
 
   for (const auto &entry : fs::directory_iterator(directory)) {
     if (fs::is_directory(entry)) {
-      std::pair<char, std::string> p =
-          std::make_pair('D', entry.path().string());
-      filesAndFolders.push_back(p);
+      if (!containsStr(entry.path().string())) {
+        std::pair<char, std::string> p =
+            std::make_pair('D', entry.path().string());
+        filesAndFolders.push_back(p);
+      }
     } else if (fs::is_regular_file(entry)) {
       std::pair<char, std::string> p =
           std::make_pair('F', entry.path().string());

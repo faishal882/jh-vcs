@@ -1,3 +1,4 @@
+#include "../utils/fileutils.h"
 #include "../utils/zlibutils.h"
 #include <fstream>
 #include <string>
@@ -11,7 +12,7 @@ private:
 
 public:
   catFile(const std::string hash);
-  std::string resolveFilePath();
+
   bool decompressFile();
   void execute();
 };
