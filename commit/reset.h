@@ -2,6 +2,7 @@
 
 #include "../utils/fileutils.h"
 #include "../utils/zlibutils.h"
+#include <regex>
 
 namespace jh {
 namespace commit {
@@ -12,12 +13,18 @@ public:
 
   ResetCommit(const std::string &hash);
 
-  bool deCompressCommit(const std::string &hash);
-  bool deCompressTree(const std::string &hash);
+  bool decompress(const std::string &hash);
+  std::string deCompressCommit(const std::string &hash);
+  std::string deCompressTree(const std::string &hash);
   bool deCompressBlob(const std::string &hash);
+
+  std::string extractTreeHash(const std::string &commit);
+  std::vector<std::vector<std::string>> getBlobsandTrees(std::string &tree);
 
   bool replaceFileContent(const char *hash, const char *filename);
   bool createFile(const char *hash, const char *filename);
+
+  void execute();
 };
 } // namespace commit
 } // namespace jh

@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
   else if (command == "reset") {
     ResetCommit reset(arg1);
-    reset.deCompressCommit(arg1);
+    reset.execute();
   }
 
   return 0;
