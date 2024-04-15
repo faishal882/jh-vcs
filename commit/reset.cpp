@@ -95,12 +95,12 @@ ResetCommit::getBlobsandTrees(std::string &tree) {
   return blobsandTrees;
 }
 
-bool ResetCommit::deCompressBlob(const std::string &hash) {
+std::string ResetCommit::deCompressBlob(const std::string &hash) {
   std::string file = fileUtils::resolveFilePath(hash);
   std::ifstream inFile(file, std::ios::binary);
   if (!inFile.is_open()) {
     std::cerr << "Failed to open input file: " << file << std::endl;
-    return false;
+    return "";
   }
 
   std::stringstream ss;
@@ -111,30 +111,48 @@ bool ResetCommit::deCompressBlob(const std::string &hash) {
 
   bool decompressed = Zlib::decompress(ss, data);
   if (decompressed)
-    std::cout << data << std::endl;
+    return data;
 
+  return "";
+}
+
+bool ResetCommit::replaceFileContents(const std::string &filename,
+                                      const std::string &content) {
+  std::ofstream file(filename);
+  if (!file.is_open()) {
+    return false;
+  }
+
+  file << content;
+  file.close();
   return true;
 }
 
-bool replaceFileContent(const char *hash, const char *filename);
 bool createFile(const char *hash, const char *filename);
 
 void ResetCommit::execute() {
   std::string commit = deCompressCommit(this->hash);
+
   if (commit != "") {
     std::string treeHash = extractTreeHash(commit);
     std::cout << treeHash << std::endl;
+
     if (treeHash != "") {
       std::string tree = deCompressTree(treeHash);
+
       if (tree != "") {
         std::vector<std::vector<std::string>> blobsandTrees =
             getBlobsandTrees(tree);
+
         if (!blobsandTrees.empty()) {
-          for (const auto &i : blobsandTrees) {
-            for (const auto &j : i) {
-              std::cout << j << " ";
+          for (auto const &i : blobsandTrees) {
+
+            if (i[0] == "blob") {
+              std::string contents = deCompressBlob(i[2]);
+
+              if (contents != "")
+                replaceFileContents(i[1], contents);
             }
-            std::cout << std::endl;
           }
         }
       }
