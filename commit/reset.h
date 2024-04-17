@@ -16,7 +16,8 @@ public:
   bool decompress(const std::string &hash);
   std::string deCompressCommit(const std::string &hash);
   std::string deCompressTree(const std::string &hash);
-  std::string deCompressBlob(const std::string &hash);
+
+  bool deCompressBlob(const std::string &hash, const std::string &filename);
 
   std::string extractTreeHash(const std::string &commit);
   std::vector<std::vector<std::string>> getBlobsandTrees(std::string &tree);

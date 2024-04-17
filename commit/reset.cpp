@@ -95,38 +95,80 @@ ResetCommit::getBlobsandTrees(std::string &tree) {
   return blobsandTrees;
 }
 
-std::string ResetCommit::deCompressBlob(const std::string &hash) {
+/* function which takes hash of blob and replaces the file contents of
+ * corresponding file */
+bool ResetCommit::deCompressBlob(const std::string &hash,
+                                 const std::string &filename) {
   std::string file = fileUtils::resolveFilePath(hash);
+
   std::ifstream inFile(file, std::ios::binary);
   if (!inFile.is_open()) {
     std::cerr << "Failed to open input file: " << file << std::endl;
-    return "";
-  }
-
-  std::stringstream ss;
-  ss << inFile.rdbuf();
-  inFile.close();
-
-  std::string data;
-
-  bool decompressed = Zlib::decompress(ss, data);
-  if (decompressed)
-    return data;
-
-  return "";
-}
-
-bool ResetCommit::replaceFileContents(const std::string &filename,
-                                      const std::string &content) {
-  std::ofstream file(filename);
-  if (!file.is_open()) {
     return false;
   }
 
-  file << content;
-  file.close();
+  std::ofstream outFile(filename, std::ios::binary);
+  if (!outFile.is_open()) {
+    std::cerr << "Failed to open outFile file: " << filename << std::endl;
+    return false;
+  }
+
+  // Set up zlib structures
+  z_stream stream;
+  stream.zalloc = Z_NULL;
+  stream.zfree = Z_NULL;
+  stream.opaque = Z_NULL;
+  stream.avail_in = 0;
+  stream.next_in = Z_NULL;
+
+  // Initialize zlib for decompression
+  if (inflateInit(&stream) != Z_OK) {
+    std::cerr << "Failed to initialize zlib for decompression" << std::endl;
+    return false;
+  }
+
+  const int CHUNK_SIZE = 1024; // Size of the buffer for reading input
+  unsigned char inBuffer[CHUNK_SIZE];
+  unsigned char outBuffer[CHUNK_SIZE];
+
+  do {
+    inFile.read(reinterpret_cast<char *>(inBuffer), CHUNK_SIZE);
+    stream.avail_in = inFile.gcount();
+
+    if (stream.avail_in == 0) {
+      break; // No more input data
+    }
+    stream.next_in = inBuffer;
+
+    do {
+      stream.avail_out = CHUNK_SIZE;
+      stream.next_out = outBuffer;
+      int ret = inflate(&stream, Z_NO_FLUSH);
+
+      if (ret == Z_STREAM_ERROR) {
+        std::cerr << "Error during decompression: " << stream.msg << std::endl;
+        inflateEnd(&stream); // Clean up zlib resources
+        return false;
+      }
+
+      size_t have = CHUNK_SIZE - stream.avail_out;
+      outFile.write(reinterpret_cast<const char *>(outBuffer), have);
+
+    } while (stream.avail_out == 0);
+  } while (true);
+
+  inflateEnd(&stream);
+
+  inFile.close();
+  outFile.close();
+
   return true;
 }
+
+// bool ResetCommit::replaceFileContents(const std::string &filename,
+// const std::string &content) {
+// return true;
+// }
 
 bool createFile(const char *hash, const char *filename);
 
@@ -148,10 +190,9 @@ void ResetCommit::execute() {
           for (auto const &i : blobsandTrees) {
 
             if (i[0] == "blob") {
-              std::string contents = deCompressBlob(i[2]);
-
-              if (contents != "")
-                replaceFileContents(i[1], contents);
+              bool contents = deCompressBlob(i[2], i[1]);
+              if (contents)
+                std::cout << "SUCCEED" << i[1] << std::endl;
             }
           }
         }
