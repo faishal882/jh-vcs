@@ -7,7 +7,7 @@ hashBlob::hashBlob(std::string inputFile) { this->inputFile = inputFile; }
 
 bool hashBlob::createBlob() {
   std::stringstream fileData;
-  std::string compressedData;
+  std::vector<char> compressedData;
 
   std::ifstream inFile(inputFile, std::ios::binary);
   if (!inFile.is_open()) {

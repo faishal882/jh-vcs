@@ -50,7 +50,7 @@ bool Tree::createTree(std::stringstream &tree,
       /* read file data, compress data, create hash of compressed data, store it
        in tree with metadata */
       std::stringstream ss;
-      std::string data;
+      std::vector<char> data;
 
       std::ifstream inFile(entry.second, std::ios::binary);
       if (!inFile.is_open()) {
@@ -77,7 +77,7 @@ bool Tree::createTree(std::stringstream &tree,
           getFilesAndFolders(entry.second);
       std::stringstream subTree;
       createTree(subTree, subFiles);
-      std::string data;
+      std::vector<char> data;
       bool compressed = Zlib::compress(subTree, data);
       if (compressed) {
         std::string sha = Zlib::sha1(data);

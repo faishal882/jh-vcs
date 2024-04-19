@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <vector>
 
 namespace jh {
 class fileUtils {
@@ -28,7 +29,7 @@ public:
     return 0;
   }
 
-  static bool createFile(std::string &hash, std::string &data) {
+  static bool createFile(std::string &hash, const std::vector<char> &data) {
     std::string folder = hash.substr(0, 2);
     std::string file_name = hash.substr(2, 38);
     std::string folder_location = ".jh/objects/" + folder;
@@ -41,7 +42,7 @@ public:
                   << std::endl;
         return false;
       }
-      outFile.write(data.c_str(), data.length());
+      outFile.write(data.data(), data.size());
       outFile.close();
 
       return true;

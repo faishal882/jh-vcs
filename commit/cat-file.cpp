@@ -21,7 +21,8 @@ bool catFile::decompressFile() {
   bool decompressed = Zlib::decompress(ss, data);
 
   if (decompressed)
-    std::cout << data << std::endl;
+    // std::cout << data << std::endl;
+    std::cout << "SUCCESS" << std::endl;
 
   return true;
 }

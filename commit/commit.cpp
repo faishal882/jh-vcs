@@ -45,7 +45,7 @@ std::string Commit::createTree() {
   Tree tree = Tree();
   std::cout << tree.tree << std::endl;
   std::stringstream ss(tree.tree);
-  std::string data;
+  std::vector<char> data;
 
   if (Zlib::compress(ss, data)) {
     std::string sha;
@@ -60,7 +60,7 @@ std::string Commit::createTree() {
 bool Commit::createCommit() {
   std::cout << author << " " << message << std::endl;
   std::stringstream commit;
-  std::string compressedData;
+  std::vector<char> compressedData;
 
   commit << "Tree: "
          << "\t" << tree << std::endl
