@@ -43,7 +43,6 @@ std::string Commit::parentHash() {
 
 std::string Commit::createTree() {
   Tree tree = Tree();
-  std::cout << tree.tree << std::endl;
   std::stringstream ss(tree.tree);
   std::vector<char> data;
 
@@ -57,8 +56,30 @@ std::string Commit::createTree() {
   return "";
 }
 
+bool Commit::createLogs(const std::string &commitHash) {
+  std::string file = ".jh/logs/HEAD";
+  std::ofstream logFile(file, std::ios::app);
+  if (!logFile.is_open()) {
+    std::cerr << "Failed to open log file: " << file << std::endl;
+    return false;
+  }
+
+  std::string parent = this->parent;
+  if (parent == "")
+    parent = "0000000000000000000000000000000000000000";
+
+  std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+  std::time_t timestamp = std::chrono::system_clock::to_time_t(now);
+
+  logFile << parent << "  " << commitHash << "  " << this->author << "  "
+          << timestamp << "      "
+          << "commit: " << this->message << std::endl;
+  logFile.close();
+
+  return true;
+}
+
 bool Commit::createCommit() {
-  std::cout << author << " " << message << std::endl;
   std::stringstream commit;
   std::vector<char> compressedData;
 
@@ -93,6 +114,10 @@ bool Commit::createCommit() {
 
       file << sha;
       file.close();
+
+      bool createLog = createLogs(sha);
+      if (!createLog)
+        return false;
 
       return true;
     }

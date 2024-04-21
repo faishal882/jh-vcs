@@ -42,12 +42,10 @@ int Init::createFile(const char *filepath, const char *filename, mode_t mode) {
     return -1;
   }
 
-  if (filename == "HEAD")
+  if (filename == "HEAD" && filepath == this->filepath)
     fprintf(file, "ref: refs/master");
   else if (filename == "config")
     fprintf(file, "This is config file all config stays here\n");
-  else
-    fprintf(file, "Null");
   fclose(file);
 
   return 0;
@@ -100,6 +98,16 @@ int Init::execute() {
 
   const char *refsFolder = resolveFilePath(filepath, "refs");
   if (createFolder(refsFolder, mode) == -1) {
+    deleteFolder(filepath);
+    return -1;
+  }
+
+  const char *logsFolder = resolveFilePath(filepath, "logs");
+  if (createFolder(logsFolder, mode) == -1) {
+    deleteFolder(filepath);
+    return -1;
+  }
+  if (createFile(logsFolder, "HEAD", mode) == -1) {
     deleteFolder(filepath);
     return -1;
   }

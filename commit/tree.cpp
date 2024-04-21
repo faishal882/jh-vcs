@@ -4,7 +4,6 @@ namespace jh {
 namespace commit {
 
 Tree::Tree() {
-  std::cout << "Please pass directoryPath, default cwd; " << std::endl;
   directoryPath = ".";
   files = getFilesAndFolders(directoryPath);
   tree = tree_str();

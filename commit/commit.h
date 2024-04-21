@@ -3,6 +3,7 @@
 #include "../utils/fileutils.h"
 #include "../utils/zlibutils.h"
 #include "./tree.h"
+#include <chrono>
 #include <iostream>
 #include <sstream>
 
@@ -23,6 +24,8 @@ public:
   std::string createTree();
 
   bool createCommit();
+
+  bool createLogs(const std::string &commitHash);
 
   void execute();
 
