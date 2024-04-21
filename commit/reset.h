@@ -20,13 +20,9 @@ public:
   bool deCompressBlob(const std::string &hash, const std::string &filename);
 
   std::string extractTreeHash(const std::string &commit);
+
   std::vector<std::vector<std::string>>
   getBlobsandTrees(const std::string &tree);
-  // std::vector<std::vector<std::string>>
-  // getAllBlobs(const std::string &treeHash);
-
-  // bool replaceFileContents(const std::string &file, const std::string
-  // &content); bool createFile(const char *hash, const char *filename);
 
   void execute();
 };

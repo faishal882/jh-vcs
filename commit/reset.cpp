@@ -139,12 +139,11 @@ void ResetCommit::execute() {
           getBlobsandTrees(treeHash);
 
       for (auto const &i : allBlobsandTrees) {
-        std::cout << i[0] << "  " << i[1] << " " << i[2] << "  " << i[3]
-                  << std::endl;
 
-        bool contents = deCompressBlob(i[2], i[1]);
+        bool contents = deCompressBlob(i[3], i[2]);
         if (contents)
-          std::cout << "SUCCEED" << i[1] << std::endl;
+          std::cout << "SUCCEED"
+                    << "  " << i[2] << std::endl;
       }
     }
   }

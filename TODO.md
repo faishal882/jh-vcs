@@ -5,6 +5,6 @@
 5) Write a tree object           //done 
 6) Create a commit               //done
 7) Implement log for commits     
-8) Implement revert(git revert)
+8) Implement revert(git revert)  //done
 9) Impelment diff(git diff)
 
