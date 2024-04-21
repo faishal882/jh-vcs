@@ -13,7 +13,7 @@ private:
 public:
   catFile(const std::string hash);
 
-  bool decompressFile();
+  bool decompressData();
   void execute();
 };
 } // namespace commit

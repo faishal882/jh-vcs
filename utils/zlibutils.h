@@ -121,7 +121,6 @@ public:
         size_t have = CHUNK_SIZE - stream.avail_out;
         deCompressedStream.write(reinterpret_cast<const char *>(outBuffer),
                                  have);
-        std::cout << outBuffer;
       } while (stream.avail_out == 0);
     } while (true);
 

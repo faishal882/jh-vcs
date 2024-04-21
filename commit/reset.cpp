@@ -2,10 +2,7 @@
 
 namespace jh {
 namespace commit {
-ResetCommit::ResetCommit(const std::string &hash) {
-  this->hash = hash;
-  // std::cout << hash << std::endl;
-}
+ResetCommit::ResetCommit(const std::string &hash) { this->hash = hash; }
 
 std::string ResetCommit::deCompressCommit(const std::string &hash) {
   std::string file = fileUtils::resolveFilePath(hash);
@@ -65,34 +62,35 @@ std::string ResetCommit::deCompressTree(const std::string &hash) {
 }
 
 std::vector<std::vector<std::string>>
-ResetCommit::getBlobsandTrees(std::string &tree) {
-  std::vector<std::vector<std::string>> blobsandTrees;
+ResetCommit::getBlobsandTrees(const std::string &treeHash) {
+  std::string tree = deCompressTree(treeHash);
 
-  std::string permission;
-  std::string type;
-  std::string name;
-  std::string sha1;
+  std::vector<std::vector<std::string>> blobsAndTrees;
 
-  std::stringstream ss(tree);
+  std::istringstream ss(tree);
   std::string line;
 
   while (std::getline(ss, line)) {
     std::istringstream iss(line);
 
-    iss >> permission;
-    iss >> type;
-    iss >> name;
-    iss >> sha1;
-
-    std::vector<std::string> temp;
-    temp.push_back(type);
-    temp.push_back(name);
-    temp.push_back(sha1);
-
-    blobsandTrees.push_back(temp);
+    std::string permission, type, name, sha1;
+    if (iss >> permission >> type >> name >> sha1) {
+      if (type == "blob") {
+        std::vector<std::string> temp{permission, type, name, sha1};
+        blobsAndTrees.push_back(temp);
+      } else if (type == "tree") {
+        std::vector<std::vector<std::string>> subBlobsAndTrees =
+            getBlobsandTrees(sha1);
+        blobsAndTrees.insert(blobsAndTrees.end(), subBlobsAndTrees.begin(),
+                             subBlobsAndTrees.end());
+      }
+    } else {
+      // Handle extraction failure
+      std::cerr << "Failed to extract data from line: " << line << std::endl;
+    }
   }
 
-  return blobsandTrees;
+  return blobsAndTrees;
 }
 
 /* function which takes hash of blob and replaces the file contents of
@@ -130,37 +128,23 @@ bool ResetCommit::deCompressBlob(const std::string &hash,
   return true;
 }
 
-// bool ResetCommit::replaceFileContents(const std::string &filename,
-// const std::string &content) {
-// return true;
-// }
-
-bool createFile(const char *hash, const char *filename);
-
 void ResetCommit::execute() {
   std::string commit = deCompressCommit(this->hash);
 
   if (commit != "") {
     std::string treeHash = extractTreeHash(commit);
-    std::cout << treeHash << std::endl;
 
     if (treeHash != "") {
-      std::string tree = deCompressTree(treeHash);
+      std::vector<std::vector<std::string>> allBlobsandTrees =
+          getBlobsandTrees(treeHash);
 
-      if (tree != "") {
-        std::vector<std::vector<std::string>> blobsandTrees =
-            getBlobsandTrees(tree);
+      for (auto const &i : allBlobsandTrees) {
+        std::cout << i[0] << "  " << i[1] << " " << i[2] << "  " << i[3]
+                  << std::endl;
 
-        if (!blobsandTrees.empty()) {
-          for (auto const &i : blobsandTrees) {
-
-            if (i[0] == "blob") {
-              bool contents = deCompressBlob(i[2], i[1]);
-              if (contents)
-                std::cout << "SUCCEED" << i[1] << std::endl;
-            }
-          }
-        }
+        bool contents = deCompressBlob(i[2], i[1]);
+        if (contents)
+          std::cout << "SUCCEED" << i[1] << std::endl;
       }
     }
   }

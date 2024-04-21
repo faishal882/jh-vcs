@@ -4,7 +4,7 @@ namespace jh {
 namespace commit {
 catFile::catFile(const std::string hash) { this->hash = hash; };
 
-bool catFile::decompressFile() {
+bool catFile::decompressData() {
   std::string file = fileUtils::resolveFilePath(hash);
   std::ifstream inFile(file, std::ios::binary);
   if (!inFile.is_open()) {
@@ -21,10 +21,11 @@ bool catFile::decompressFile() {
   bool decompressed = Zlib::decompress(ss, data);
 
   if (decompressed)
-    // std::cout << data << std::endl;
-    std::cout << "SUCCESS" << std::endl;
+    std::cout << data << std::endl;
 
   return true;
 }
+
+void catFile::execute() { decompressData(); }
 } // namespace commit
 } // namespace jh

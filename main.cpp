@@ -17,7 +17,8 @@ int main(int argc, char *argv[]) {
   std::string flag = argv[3];
 
   if (command == "cat-file") {
-    catFile(arg1).decompressFile();
+    catFile cat_file(arg1);
+    cat_file.execute();
   }
 
   else if (command == "init") {
