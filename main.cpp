@@ -1,3 +1,4 @@
+#include "./commit/commit-logs.h"
 #include "commit/cat-file.h"
 #include "commit/commit.h"
 #include "commit/hash-blob.h"
@@ -50,6 +51,11 @@ int main(int argc, char *argv[]) {
   else if (command == "reset") {
     ResetCommit reset(arg1);
     reset.execute();
+  }
+
+  else if (command == "log") {
+    commitLog logs;
+    logs.execute();
   }
 
   return 0;
