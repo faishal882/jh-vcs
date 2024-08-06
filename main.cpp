@@ -6,6 +6,8 @@
 #include "commit/reset.h"
 #include "commit/tree.h"
 #include "init/init.h"
+#include "utils/res-args.h"
+
 #include <iostream>
 
 int main(int argc, char *argv[]) {
@@ -13,9 +15,7 @@ int main(int argc, char *argv[]) {
   using namespace commit;
   using namespace init;
 
-  std::string command = argv[1];
-  std::string arg1 = argv[2];
-  std::string flag = argv[3];
+  auto [command, arg1, flag] = resoleCommands(argc, argv);
 
   if (command == "cat-file") {
     catFile cat_file(arg1);
