@@ -4,7 +4,8 @@
 4) Read a tree object            //done 
 5) Write a tree object           //done 
 6) Create a commit               //done
-7) Implement log for commits     
+7) Implement log for commits     //done 
 8) Implement revert(git revert)  //done
 9) Impelment diff(git diff)
+10) Implement branches
 
