@@ -8,7 +8,7 @@ My motivation behind it to learn more about internals of Git, and also advance m
 
 ## Architectre
 
-The architecture i followed to bild this version control system is very much simailar to git. In this architecture every file is treated as `BLOB`
+The architecture i followed to build this version control system is very much simailar to git. In this architecture every file is treated as `BLOB`
 and every directory is treated as a `TREE` a tree may conatin either one or more blobs and it may also contain another tree.
 First when the command `<executable> init` is being run it will create a folder named `.jh` this folder contains 
 different information about the repository. When the programmer runs `<executable> commit "<commit-message>"` it first compresses the blob data and creates a unique
@@ -24,14 +24,14 @@ bash
 sudo apt-get update
 sudo apt-get install libssl-dev zlib1g-dev
 ```
-
+If you have already installed git, there is high probability that prequisite libraries `zlib` and `libssl` are already installed
 ## How to Use:
 
-1. First create the exectable by rnning the command `make`
+1. First create the exectable by running the command `make`
 
-2. After running `make` command rn command `make clean` to delete `*.o(object files)` files
+2. After running `make` command run command `make clean` to delete `*.o(object files)` files (optional)
 
-3. After exectable has been created, run command `<executable> init` this command Initializes the repository
+3. After exectable has been created, run command `<executable> init <folder-name>` `.` for default root folder where the local repo will be created this command Initializes the repository, the executable is `jh-vcs`
 
 4. After Initializing the repository run command `<executable> commit "<commit-message>"` to commit changes to the repository.
 
@@ -54,6 +54,6 @@ sudo apt-get install libssl-dev zlib1g-dev
 ## WARNING 😞
 
 This program is written in C/C++ and tested in Debian/Linux before running it in windows or any other operating
-you may have to change some code :wrench:. Even though i tried my best to write croos-platform code
+you may have to change some code. Even though i tried my best to write croos-platform code
 Thanks
 

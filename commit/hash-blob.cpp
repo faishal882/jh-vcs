@@ -1,4 +1,4 @@
-#include "hash-blob.h"
+#include "../include/commit/hash-blob.h"
 
 namespace jh {
 namespace commit {

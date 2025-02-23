@@ -1,12 +1,12 @@
-#include "./commit/commit-logs.h"
-#include "commit/cat-file.h"
-#include "commit/commit.h"
-#include "commit/hash-blob.h"
-#include "commit/ls-tree.h"
-#include "commit/reset.h"
-#include "commit/tree.h"
-#include "init/init.h"
-#include "utils/res-args.h"
+#include "./include/commit/cat-file.h"
+#include "./include/commit/commit-logs.h"
+#include "./include/commit/commit.h"
+#include "./include/commit/hash-blob.h"
+#include "./include/commit/ls-tree.h"
+#include "./include/commit/reset.h"
+#include "./include/commit/tree.h"
+#include "./include/init/init.h"
+#include "./include/utils/res-args.h"
 
 #include <iostream>
 

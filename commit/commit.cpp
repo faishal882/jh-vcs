@@ -1,4 +1,4 @@
-#include "commit.h"
+#include "../include/commit/commit.h"
 
 namespace jh {
 namespace commit {

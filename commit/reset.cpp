@@ -1,4 +1,4 @@
-#include "reset.h"
+#include "../include/commit/reset.h"
 
 namespace jh {
 namespace commit {

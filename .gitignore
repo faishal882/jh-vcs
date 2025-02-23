@@ -2,6 +2,9 @@
 .jh/*
 ./.jh/
 
+# build artifacts
+build/
+
 # Executables
 *.exe
 *.out
@@ -11,3 +14,19 @@
 *.hex
 *.elf
 main.out
+jh-vcs
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+*.lo
+*.la
+*.al
+
+# Libraries
+*.a
+*.so
+*.so.*
+*.dylib
