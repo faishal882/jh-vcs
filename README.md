@@ -29,15 +29,16 @@ If you have already installed git, there is high probability that prequisite lib
 
 1. First create the exectable by running the command `make`
 
-2. After running `make` command run command `make clean` to delete `*.o(object files)` files (optional)
+2. After exectable has been created, run command `<executable> init <folder-name>` `.` for default root folder where the local repo will be created this command Initializes the repository, the executable is `jh-vcs`, 
+located in build folder `make clean` removes delete folder
 
-3. After exectable has been created, run command `<executable> init <folder-name>` `.` for default root folder where the local repo will be created this command Initializes the repository, the executable is `jh-vcs`
+3. After Initializing the repository run command `<executable> commit "<commit-message>"` to commit changes to the repository.
 
-4. After Initializing the repository run command `<executable> commit "<commit-message>"` to commit changes to the repository.
+4. Run command `<executable> log` to see all the commits with its hashes
 
-5. Run command `<executable> log` to see all the commits with its hashes
+5. To restore your working directory to different commit run command `<executable> reset <hash>`. 
 
-6. To restore your working directory to different commit run command `<executable> restore <hash>`. 
+6. Run command `make clean` to delete `*.o(object files)` files and executable (optional)
 
 
 

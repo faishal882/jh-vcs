@@ -21,7 +21,8 @@ SRCS = main.cpp \
        ./commit/hash-blob.cpp \
        ./commit/commit.cpp \
        ./commit/cat-file.cpp \
-       ./commit/commit-logs.cpp
+       ./commit/commit-logs.cpp \
+       ./utils/remoteutils.cpp \
 
 # Object files (with build directory prefix)
 OBJS = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))

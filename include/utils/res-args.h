@@ -5,7 +5,7 @@
 
 namespace jh {
 static std::tuple<std::string, std::string, std::string>
-resoleCommands(int argc, char *argv[]) {
+resolveCommands(int argc, char *argv[]) {
   // Default values
   std::string command = "command";
   std::string arg1 = "arg1";
